@@ -1,4 +1,7 @@
 # Evaluating ALICE on Bolivia Data
+
+![GUI for annotations](https://github.com/spoglab-ucla/bolivia-valid8/blob/master/boliviainterface.jpg?raw=true)
+
 This is the repo with the code to run the Bolivia ALICE Validation interface.
 
 For annotation purposes: the relevant script is `boliviaValid8.py`.
