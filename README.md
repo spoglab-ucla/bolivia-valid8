@@ -1,6 +1,6 @@
 # Evaluating ALICE on Bolivia Data
 
-<img src="boliviainterface.png" alt="GUI" width="400"/>
+<img src="boliviainterface.png" alt="GUI" width="450"/>
 
 This is the repo with the code to run the Bolivia ALICE Validation interface.
 

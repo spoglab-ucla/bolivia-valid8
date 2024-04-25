@@ -1,3 +1,12 @@
+''' 
+    ==========================================
+    SPOG Lab, UCLA 
+    Version 01, published on April 25, 2024
+    Authors: Arjun Pawar and Dr. Meg Cychosz
+    ==========================================
+'''
+
+
 import tkinter as tk
 import pandas as pd
 from tkinter import ttk
