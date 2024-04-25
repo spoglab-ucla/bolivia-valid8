@@ -1,5 +1,6 @@
 # Evaluating ALICE on Bolivia Data
 
+<img src="boliviainterface.png" alt="GUI" width="200"/>
 ![GUI for annotations](https://github.com/spoglab-ucla/bolivia-valid8/blob/master/boliviainterface.png?raw=true)
 
 This is the repo with the code to run the Bolivia ALICE Validation interface.
