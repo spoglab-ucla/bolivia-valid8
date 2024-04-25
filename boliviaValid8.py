@@ -11,6 +11,7 @@ import datetime
 import sys
 
 link_to_chopped_clips_folder = sys.argv[1]
+annotator_name = sys.argv[2]
 
 # DEFINING FILEPATH CONSTANTS
 
@@ -75,14 +76,14 @@ def annotatorinfo():
 
     try: # if available, open the response df so we can append new work to it
 
-        resp_df = pd.read_csv(os.path.join(outdir, "responses.csv")) 
+        resp_df = pd.read_csv(os.path.join(outdir, annotator_name+"_responses.csv")) 
         idx = len(resp_df)
         print("Number of clips done till now = ",idx)
 
     except: # if not, create one (this happens the first time)
         empty = pd.DataFrame().assign(Language=None, Speaker=None, Word_count = None,Syllable_count = None,Phoneme_count = None, annotate_date_YYYYMMDD=None, Clip = None ) # add addtl columns, file_name=None, 
-        empty.to_csv(os.path.join(outdir, "responses.csv"), index=False) 
-        resp_df = pd.read_csv(os.path.join(outdir, "responses.csv")) 
+        empty.to_csv(os.path.join(outdir, annotator_name+"_responses.csv"), index=False) 
+        resp_df = pd.read_csv(os.path.join(outdir, annotator_name+"_responses.csv" )) 
 
     createRandomizationOrder()
 
@@ -129,7 +130,7 @@ def next_audio():
 
     allcols = pd.DataFrame([row]).assign(Language=language, Speaker=speaker, Word_count = word_count,Syllable_count = syll_count,Phoneme_count = phon_count, annotate_date_YYYYMMDD=annotate_date_YYYYMMDD, Clip = file_name) 
     resp_df = pd.concat([resp_df, allcols], sort=True) # append new records in old csv
-    resp_df.to_csv(os.path.join(outdir, "responses.csv"), index=False)  # overwrite responses.csv each time  
+    resp_df.to_csv(os.path.join(outdir, annotator_name+"_responses.csv"), index=False)  # overwrite responses.csv each time  
 
     idx += 1 # update the global idx
 
