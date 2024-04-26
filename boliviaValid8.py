@@ -1,7 +1,7 @@
 ''' 
     ==========================================
     SPOG Lab, UCLA 
-    Version 01, published on April 25, 2024
+    Version 02, published on April 26, 2024
     Authors: Arjun Pawar and Dr. Meg Cychosz
     ==========================================
 '''
@@ -28,10 +28,9 @@ annotator_name = sys.argv[2]
 clipfolder = link_to_chopped_clips_folder
 
 # text file with clip names in order
-all_clips_in_order = os.path.join(link_to_chopped_clips_folder, 'all_child_clips_randomized.txt') 
+all_clips_in_order = os.path.join(link_to_chopped_clips_folder, 'filemapping.txt') 
 
 outdir = link_to_chopped_clips_folder #folder with responses.csv
-
 
 #number of minute-audio-clips in folder; index of row in df
 idx = 0
@@ -39,9 +38,10 @@ df = None
 row = None
 resp_df = None
 allfilenames = []
-NUM_VALUES = ['0','1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','Unclear'] #add babbles for word count / phoneme string
-LANG_VALUES = ["Spanish", "Quechua", "Mixed", "Unsure", "No speech"] #researchr present
-SPEAKER_VALUES = [ "Adult male", "Adult female", "Other child & adult male", "other child & adult female","Other child","Unsure"] #add target child, allow more combinations
+actualnames = []
+NUM_VALUES = ['0','1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','Unclear']
+LANG_VALUES = ["Spanish", "Quechua", "Mixed", "Unsure", "No speech", "Only researcher speech"]   
+SPEAKER_VALUES = [ "Adult male", "Adult female", "Other child & adult male", "Other child & adult female","Other child","Target child","Adult male & target child", "Adult female & target child", "Target child with other child", "Adult male & female both",  "Unsure"]
 
 #helper function
 def unique(list1):
@@ -72,7 +72,12 @@ def createRandomizationOrder():
     file1 = open(all_clips_in_order, 'r')
     lines = file1.readlines()
     for eachline in lines:
-        allfilenames.append(eachline.strip())
+        pair = eachline.strip()
+        comma = pair.find(",")
+        oldname = (pair[0:comma]).strip()
+        newname = (pair[comma+1:]).strip()
+        allfilenames.append(newname)
+        actualnames.append(oldname)
 
 # set up initial pieces
 def annotatorinfo():
@@ -90,7 +95,7 @@ def annotatorinfo():
         print("Number of clips done till now = ",idx)
 
     except: # if not, create one (this happens the first time)
-        empty = pd.DataFrame().assign(Language=None, Speaker=None, Word_count = None,Syllable_count = None,Phoneme_count = None, annotate_date_YYYYMMDD=None, Clip = None ) # add addtl columns, file_name=None, 
+        empty = pd.DataFrame().assign(Language=None, Speaker=None, Word_count = None,Syllable_count = None,Phoneme_count = None, annotate_date_YYYYMMDD=None, Clip = None,ActualClip=None ) 
         empty.to_csv(os.path.join(outdir, annotator_name+"_responses.csv"), index=False) 
         resp_df = pd.read_csv(os.path.join(outdir, annotator_name+"_responses.csv" )) 
 
@@ -137,8 +142,8 @@ def next_audio():
 
     annotate_date_YYYYMMDD = datetime.datetime.now() # get current annotation time
 
-    allcols = pd.DataFrame([row]).assign(Language=language, Speaker=speaker, Word_count = word_count,Syllable_count = syll_count,Phoneme_count = phon_count, annotate_date_YYYYMMDD=annotate_date_YYYYMMDD, Clip = file_name) 
-    resp_df = pd.concat([resp_df, allcols], sort=True) # append new records in old csv
+    allcols = pd.DataFrame([row]).assign(Language=language, Speaker=speaker, Word_count = word_count,Syllable_count = syll_count,Phoneme_count = phon_count, annotate_date_YYYYMMDD=annotate_date_YYYYMMDD, Clip = file_name, ActualClip = actualnames[idx]) 
+    resp_df = pd.concat([resp_df, allcols]) # append new records in old csv
     resp_df.to_csv(os.path.join(outdir, annotator_name+"_responses.csv"), index=False)  # overwrite responses.csv each time  
 
     idx += 1 # update the global idx
