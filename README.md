@@ -1,5 +1,8 @@
 # Evaluating ALICE on Bolivia Data
 
+**Contributors:** Arjun Pawar (UCLA) and P.I. Dr. Meg Cychosz (UCLA)
+
+
 <img src="boliviainterface.png" alt="GUI" width="450"/>
 
 This is the repo with the code to run the Bolivia ALICE Validation interface.
