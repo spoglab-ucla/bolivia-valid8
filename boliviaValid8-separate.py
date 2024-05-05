@@ -1,12 +1,10 @@
 ''' 
     ==========================================
     SPOG Lab, UCLA 
-    Version 02, published on April 26, 2024
+    Version 03, published on May 04, 2024
     Authors: Arjun Pawar and Dr. Meg Cychosz
     ==========================================
 '''
-
-
 import tkinter as tk
 import pandas as pd
 from tkinter import ttk
@@ -34,6 +32,7 @@ outdir = link_to_chopped_clips_folder #folder with responses.csv
 
 #number of minute-audio-clips in folder; index of row in df
 idx = 0
+USER_INP = ''
 df = None
 row = None
 resp_df = None
@@ -69,15 +68,16 @@ def combine_funcs(*funcs):
 # this function loads the randomized list of clips (if available) or creates a new list (if not made)
 def createRandomizationOrder():
     global allfilenames
-    file1 = open(all_clips_in_order, 'r')
+    clips_to_play = os.path.join(clipfolder, USER_INP, USER_INP+"_xxxx_randomized.txt")
+    file1 = open(clips_to_play, 'r')
     lines = file1.readlines()
     for eachline in lines:
-        pair = eachline.strip()
-        comma = pair.find(",")
-        oldname = (pair[0:comma]).strip()
-        newname = (pair[comma+1:]).strip()
-        allfilenames.append(newname)
-        actualnames.append(oldname)
+        #pair = eachline.strip()
+        #comma = pair.find(",")
+        #oldname = (pair[0:comma]).strip()
+        #newname = (pair[comma+1:]).strip()
+        allfilenames.append(eachline.strip())
+        actualnames.append(eachline.strip())
 
 # set up initial pieces
 def annotatorinfo():
@@ -86,18 +86,24 @@ def annotatorinfo():
     global content
     global resp_df
     global allfilenames
-    global idx    
+    global idx     
+    global USER_INP
+    
+    wrong = True
+    while (wrong):
+        USER_INP = tk.simpledialog.askstring(title="CHILD ID",prompt="Out of the below child IDs which one do you want to annotate? 1065, 1050, 1094, 1071, 1090, 1062, 1034, 1083, 1039, 1054, 1042, 1029")
+        if USER_INP in ['1065', '1050', '1094', '1071', '1090', '1062', '1034', '1083', '1039', '1054', '1042', '1029']:
+            wrong = False
 
     try: # if available, open the response df so we can append new work to it
 
-        resp_df = pd.read_csv(os.path.join(outdir, annotator_name+"_responses.csv")) 
+        resp_df = pd.read_csv(os.path.join(outdir, annotator_name+"_"+USER_INP+"_responses.csv")) 
         idx = len(resp_df)
-        print("Number of clips done till now = ",idx)
 
     except: # if not, create one (this happens the first time)
         empty = pd.DataFrame().assign(Language=None, Speaker=None, Word_count = None,Syllable_count = None,Phoneme_count = None, annotate_date_YYYYMMDD=None, Clip = None,ActualClip=None ) 
-        empty.to_csv(os.path.join(outdir, annotator_name+"_responses.csv"), index=False) 
-        resp_df = pd.read_csv(os.path.join(outdir, annotator_name+"_responses.csv" )) 
+        empty.to_csv(os.path.join(outdir, annotator_name+"_"+USER_INP+"_responses.csv"), index=False) 
+        resp_df = pd.read_csv(os.path.join(outdir, annotator_name+"_"+USER_INP+"_responses.csv")) 
 
     createRandomizationOrder()
 
@@ -121,12 +127,14 @@ def play_audio():
     global row
     global audiofile
     global file_name
+
     file_name = allfilenames[idx]
-    idfolder = file_name[0:4]
-    audiofile = os.path.join(clipfolder,idfolder, file_name)
+    lastunderscore = file_name.rfind('_')
+    file_name = file_name[0:4] + "_xxxx_" +file_name[lastunderscore+1:]
+
+    #idfolder = file_name[0:4]
+    audiofile = os.path.join(clipfolder, USER_INP, file_name)
     subprocess.check_call(['open', '-a', 'Quicktime Player', audiofile])
-
-
 
 #go to the next audio file 
 def next_audio():
@@ -144,12 +152,12 @@ def next_audio():
 
     allcols = pd.DataFrame([row]).assign(Language=language, Speaker=speaker, Word_count = word_count,Syllable_count = syll_count,Phoneme_count = phon_count, annotate_date_YYYYMMDD=annotate_date_YYYYMMDD, Clip = file_name, ActualClip = actualnames[idx]) 
     resp_df = pd.concat([resp_df, allcols]) # append new records in old csv
-    resp_df.to_csv(os.path.join(outdir, annotator_name+"_responses.csv"), index=False)  # overwrite responses.csv each time  
+    resp_df.to_csv(os.path.join(outdir, annotator_name+"_"+USER_INP+"_responses.csv"), index=False)  # overwrite responses.csv each time  
 
     idx += 1 # update the global idx
 
     if idx>=len(allfilenames):
-        tk.messagebox.showinfo(title='Alert', message='All clips have been annotated. Please close the app now!')
+        tk.messagebox.showinfo(title='Alert', message='All clips have been annotated. Please close the app now! Restart to start with a new CHILD ID')
     else:
         play_audio()
 
