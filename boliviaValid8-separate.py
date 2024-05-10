@@ -1,7 +1,7 @@
 ''' 
     ==========================================
-    SPOG Lab, UCLA 
-    Version 03, published on May 04, 2024
+    SPOG Lab, UCLA
+    Version 04, published on May 10, 2024
     Authors: Arjun Pawar and Dr. Meg Cychosz
     ==========================================
 '''
@@ -39,8 +39,8 @@ resp_df = None
 allfilenames = []
 actualnames = []
 NUM_VALUES = ['0','1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','Unclear']
-LANG_VALUES = ["Spanish", "Quechua", "Mixed", "Unsure", "No speech", "Only researcher speech"]   
-SPEAKER_VALUES = [ "Adult male", "Adult female", "Other child & adult male", "Other child & adult female","Other child","Target child","Adult male & target child", "Adult female & target child", "Target child with other child", "Adult male & female both",  "Unsure"]
+LANG_VALUES = ["Spanish", "Quechua", "Mixed", "Unsure", "Only researcher speech","Too short to tell", "No speech"]   
+SPEAKER_VALUES = [ "Adult male", "Adult female", "Other child & adult male", "Other child & adult female","Other child","Target child","Adult male & target child", "Adult female & target child", "Target child with other child", "Adult male & female both", "Electronic media/noise", "Unsure"]
 
 #helper function
 def unique(list1):
