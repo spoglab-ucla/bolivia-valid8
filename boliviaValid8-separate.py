@@ -38,7 +38,7 @@ row = None
 resp_df = None
 allfilenames = []
 actualnames = []
-NUM_VALUES = ['0','1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','Unclear']
+NUM_VALUES = ['0','1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24','25','26','27','28','29','30','>30','Unclear']
 LANG_VALUES = ["Spanish", "Quechua", "Mixed", "Unsure", "Only researcher speech","Too short to tell", "No speech"]   
 SPEAKER_VALUES = [ "Adult male", "Adult female", "Other child & adult male", "Other child & adult female","Other child","Target child","Adult male & target child", "Adult female & target child", "Target child with other child", "Adult male & female both", "Electronic media/noise", "Unsure"]
 
