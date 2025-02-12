@@ -16,6 +16,7 @@ import subprocess
 import random
 import datetime
 import sys
+import platform
 
 link_to_chopped_clips_folder = sys.argv[1]
 annotator_name = sys.argv[2]
@@ -134,7 +135,13 @@ def play_audio():
 
     #idfolder = file_name[0:4]
     audiofile = os.path.join(clipfolder, USER_INP, file_name)
-    subprocess.check_call(['open', '-a', 'Quicktime Player', audiofile])
+
+    if platform.system() == "Windows":
+        subprocess.run(["wmplayer", audiofile], shell=True) 
+
+    else:
+        subprocess.check_call(['open', '-a', 'Quicktime Player', audiofile])
+    
 
 #go to the next audio file 
 def next_audio():
